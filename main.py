@@ -6,6 +6,7 @@ import threading
 mouse = Controller()
 isSpeedClick = False
 isAutoPerfect = False
+isPaused = False
 
 
 def perfectMiddleMouse(x, y, button, pressed):
@@ -33,10 +34,10 @@ def speedClick():
 
 
 def keyBinds(key):
-    global isAutoPerfect, isSpeedClick
+    global isAutoPerfect, isSpeedClick, isPaused
 
     try:
-        if key.char == 'f':
+        if key.char == 'f' and not isPaused:
             isAutoPerfect = not isAutoPerfect
             if isAutoPerfect:
                 print("Auto Perfect ON")
@@ -44,7 +45,7 @@ def keyBinds(key):
             else:
                 print("Auto Perfect OFF")
 
-        elif key.char == 'j':
+        elif key.char == 'j' and isPaused == False:
             isSpeedClick = not isSpeedClick
             if isSpeedClick:
                 print("Speed Click ON")
@@ -52,7 +53,9 @@ def keyBinds(key):
             else:
                 print("Speed Click OFF")
     except AttributeError:
-        pass
+        if key == keyboard.Key.esc:
+            isPaused = not isPaused
+            print("Paused" if isPaused else "Resumed")
 
 
 with mouse_module.Listener(on_click=perfectMiddleMouse) as mouse_listener, \
